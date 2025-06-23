@@ -6,6 +6,7 @@ import BranchSelector from './components/BranchSelector';
 import ReviewerDropdown from './components/ReviewerDropdown';
 import ControlButtons from './components/ControlButtons';
 import StatusPanel from './components/StatusPanel';
+import NokiaLogo from './assets/nokia_logo.svg';
 
 const App = () => {
   // Form state
@@ -50,8 +51,7 @@ const App = () => {
 
   // Computed properties for button states
   const canRunTests = filePathValid && devIdValid && selectedSuites.length > 0;
-  const canSubmitReview = canRunTests && compileStatus === 'pass' && testResults.length > 0;
-  const canStartAutomation = canSubmitReview && reviewStatus === 'approved';
+  const canStartAutomation = canRunTests && compileStatus === 'pass' && testResults.length > 0;
   const hasFailedTests = testResults.some(result => result.status === 'fail');
 
   // Event handlers
@@ -64,7 +64,6 @@ const App = () => {
       selectedBranches
     });
 
-    // Simulate test execution
     setCompileStatus('compiling');
     setLogs([]);
     
@@ -72,6 +71,11 @@ const App = () => {
       setCompileStatus('pass');
       setTestResults(mockTestResults);
       setLogs(mockLogs);
+      // If all tests pass, auto-submit review
+      const allPassed = mockTestResults.every(result => result.status === 'pass');
+      if (allPassed) {
+        handleSubmitReview();
+      }
     }, 3000);
   };
 
@@ -102,11 +106,7 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-nokia-blue-600 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                </svg>
-              </div>
+              <img src={NokiaLogo} alt="Nokia Logo" className="max-h-8 max-w-[100px] object-contain" />
               <h1 className="text-xl font-semibold text-nokia-gray-900">
                 Nokia Automation Dashboard
               </h1>
@@ -166,11 +166,9 @@ const App = () => {
             <div className="card p-6">
               <ControlButtons
                 canRunTests={canRunTests}
-                canSubmitReview={canSubmitReview}
                 canStartAutomation={canStartAutomation}
                 hasFailedTests={hasFailedTests}
                 onRunTests={handleRunTests}
-                onSubmitReview={handleSubmitReview}
                 onStartAutomation={handleStartAutomation}
                 onRerunFailedTests={handleRerunFailedTests}
               />

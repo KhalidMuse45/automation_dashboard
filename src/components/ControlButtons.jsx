@@ -15,21 +15,6 @@ const RunTestsButton = ({ disabled, onClick }) => {
   );
 };
 
-const SubmitReviewButton = ({ disabled, onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className="btn-secondary flex items-center space-x-2"
-    >
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <span>Submit Review</span>
-    </button>
-  );
-};
-
 const StartAutomationButton = ({ disabled, onClick }) => {
   return (
     <button
@@ -61,11 +46,9 @@ const RerunFailedTestsButton = ({ onClick }) => {
 
 const ControlButtons = ({
   canRunTests,
-  canSubmitReview,
   canStartAutomation,
   hasFailedTests,
   onRunTests,
-  onSubmitReview,
   onStartAutomation,
   onRerunFailedTests
 }) => {
@@ -79,14 +62,6 @@ const ControlButtons = ({
           onClick={() => {
             console.log('Running tests...');
             onRunTests();
-          }}
-        />
-        
-        <SubmitReviewButton
-          disabled={!canSubmitReview}
-          onClick={() => {
-            console.log('Submitting review...');
-            onSubmitReview();
           }}
         />
         
@@ -117,15 +92,15 @@ const ControlButtons = ({
             File path, Dev ID/IP, and test suite required to run tests
           </p>
         )}
-        {!canSubmitReview && canRunTests && (
+        {canRunTests && !hasFailedTests && (
           <p className="flex items-center">
             <svg className="w-4 h-4 mr-1 text-nokia-gray-400" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
             </svg>
-            Tests must pass before submitting for review
+            Review will be auto-submitted after all tests pass
           </p>
         )}
-        {!canStartAutomation && canSubmitReview && (
+        {!canStartAutomation && !hasFailedTests && (
           <p className="flex items-center">
             <svg className="w-4 h-4 mr-1 text-nokia-gray-400" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
@@ -139,4 +114,4 @@ const ControlButtons = ({
 };
 
 export default ControlButtons;
-export { RunTestsButton, SubmitReviewButton, StartAutomationButton, RerunFailedTestsButton }; 
+export { RunTestsButton, StartAutomationButton, RerunFailedTestsButton }; 

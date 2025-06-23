@@ -1,3 +1,13 @@
+To furtherr update the repo, use these commands:
+
+git add .
+git commit -m "Your message"
+git push
+
+
+
+
+
 # Nokia Internal Developer Automation Dashboard
 
 A modern, React-based frontend for Nokia's internal developer automation dashboard. Built with clean, professional design using Tailwind CSS.
